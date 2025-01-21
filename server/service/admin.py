@@ -1,3 +1,9 @@
 from django.contrib import admin
+from service.models import BackupModel
 
-# Register your models here.
+
+
+
+
+
+admin.site.register(BackupModel)
