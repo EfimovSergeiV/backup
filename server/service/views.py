@@ -13,10 +13,10 @@ def list_files(request):
 
     data = [
         {
-            'id': bkp.id,
+            'uuid': bkp.uuid,
             'service': bkp.service,
             'created_at': bkp.created_at.strftime('%d.%m.%Y %H:%M'),
-            'file': bkp.file.url
+            # 'file': bkp.file.url
         }
         for bkp in bkps        
     ]
@@ -28,6 +28,18 @@ def list_files(request):
 def get_file(request, uuid):
     """ Возвращает файл по его ID """
 
-    print(f'UUID: { uuid }')
+    qs = BackupModel.objects.get(uuid = uuid)
 
-    return HttpResponse(f'Get file { uuid }')
+    ext = qs.file.name.split('.')[-1]
+    file_name = f"{qs.service} {qs.created_at.strftime('%d.%m.%y')}.{ ext }"
+
+    with open(qs.file.path, 'rb') as f:
+        response = HttpResponse(f.read(), content_type=f"application/{ ext }")
+        # response = HttpResponse(f.read(), content_type="application/octet-stream")
+        # response['Content-Disposition'] = f'attachment; filename={file_name}'
+        response['Content-Disposition'] = f'attachment; filename="{file_name}"'
+        return response
+
+
+
+
