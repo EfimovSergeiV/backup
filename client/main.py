@@ -2,7 +2,7 @@
 import urllib.request, json, os
 
 
-BASE_URL = "http://127.0.0.1:8000/s/bkps/"
+BASE_URL = "http://192.168.60.203/s/bkps/"
 
 
 with urllib.request.urlopen(BASE_URL) as response:
@@ -13,8 +13,8 @@ with urllib.request.urlopen(BASE_URL) as response:
     for backup in json_data:
         uuid = backup['uuid']
 
-        # os.system(f'wget {BASE_URL}{uuid}/ -O {uuid}.zip')
-        cmd = f'curl -O {BASE_URL}{uuid}/'
+        cmd = f'wget --content-disposition { BASE_URL }{ uuid }/'
+        
         print(cmd)
         os.system(cmd)
 
